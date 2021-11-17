@@ -1,0 +1,22 @@
+name: expandable_reorderable_list
+description: A wrapper around ReorderableListView that allows you to expand and collapse items.
+repository: https://github.com/Novade/flutter_packages/tree/master/packages/expandable_reorderable_list
+issue_tracker: https://github.com/Novade/flutter_packages/issues
+
+version: 0.0.1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  equatable: ^2.0.3
+  flutter:
+    sdk: flutter
+  provider: ^6.0.1
+  visibility_detector: ^0.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.0
