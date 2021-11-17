@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'expandable_reorderable_list_item.dart';
@@ -356,11 +355,7 @@ class _ExpandableReorderableListState<K extends Key> extends State<ExpandableReo
       },
       child: SizeTransition(
         sizeFactor: scaleAnimations[item.key]!,
-        child: ChangeNotifierProvider<ExpandableReorderableListItemModel>.value(
-          value: modelController,
-          builder: (context, child) => item.builder(context, child, modelController),
-          child: item.child,
-        ),
+        child: item.builder(context, item.child, modelController),
       ),
     );
   }
