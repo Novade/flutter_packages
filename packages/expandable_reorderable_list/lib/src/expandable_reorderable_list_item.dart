@@ -6,7 +6,8 @@ import 'expandable_reorderable_list_item_model.dart';
 /// {@template novade.packages.expandable_reorderable_list.expandable_reorderable_list_tree_item}
 /// An element of the item tree.
 /// {@endtemplate}
-abstract class ExpandableReorderableListTreeItem<K extends Key> with EquatableMixin {
+abstract class ExpandableReorderableListTreeItem<K extends Key>
+    with EquatableMixin {
   /// {@macro novade.packages.expandable_reorderable_list.expandable_reorderable_list_tree_item}
   ExpandableReorderableListTreeItem({
     List<ExpandableReorderableListItem<K>>? children,
@@ -36,15 +37,20 @@ abstract class ExpandableReorderableListTreeItem<K extends Key> with EquatableMi
   late int _itemCount;
 
   /// The total total number of visible items.
-  int _visibleItemCount(ExpandableReorderableListItemModelController<K> modelsController) {
+  int _visibleItemCount(
+      ExpandableReorderableListItemModelController<K> modelsController) {
     if (modelsController.items[key]?.isCollapsed ?? false) {
       return 0;
     }
     return __visibleItemCount(modelsController);
   }
 
-  int __visibleItemCount(ExpandableReorderableListItemModelController<K> modelsController) {
-    return children.fold<int>(children.length, (previousValue, child) => previousValue + child._visibleItemCount(modelsController));
+  int __visibleItemCount(
+      ExpandableReorderableListItemModelController<K> modelsController) {
+    return children.fold<int>(
+        children.length,
+        (previousValue, child) =>
+            previousValue + child._visibleItemCount(modelsController));
   }
 
   ExpandableReorderableListTreeItem<K>? _itemFromIndex({
@@ -58,7 +64,11 @@ abstract class ExpandableReorderableListTreeItem<K extends Key> with EquatableMi
     _current++;
     for (final child in children) {
       final childItemCount = child._visibleItemCount(modelsController) + 1;
-      if (_current + childItemCount > index) return child._itemFromIndex(index: index, modelsController: modelsController, current: _current);
+      if (_current + childItemCount > index)
+        return child._itemFromIndex(
+            index: index,
+            modelsController: modelsController,
+            current: _current);
       _current += childItemCount;
     }
     return null;
@@ -99,7 +109,8 @@ abstract class ExpandableReorderableListTreeItem<K extends Key> with EquatableMi
   List<int> _getPositions([List<int>? currentPositions]) {
     currentPositions ??= <int>[];
     if (this is ExpandableReorderableListItem<K>) {
-      final index = parent!.children.indexOf(this as ExpandableReorderableListItem<K>);
+      final index =
+          parent!.children.indexOf(this as ExpandableReorderableListItem<K>);
       currentPositions.insert(0, index);
       return parent!._getPositions(currentPositions);
     } else {
@@ -111,7 +122,8 @@ abstract class ExpandableReorderableListTreeItem<K extends Key> with EquatableMi
   List<ExpandableReorderableListItem<K>> get parents => _getParents();
 
   /// Recursive function to get the parents.
-  List<ExpandableReorderableListItem<K>> _getParents([List<ExpandableReorderableListItem<K>>? currentParents]) {
+  List<ExpandableReorderableListItem<K>> _getParents(
+      [List<ExpandableReorderableListItem<K>>? currentParents]) {
     currentParents ??= <ExpandableReorderableListItem<K>>[];
     if (parent is ExpandableReorderableListItem<K>) {
       final castedParent = parent! as ExpandableReorderableListItem<K>;
@@ -126,19 +138,22 @@ abstract class ExpandableReorderableListTreeItem<K extends Key> with EquatableMi
 /// {@template novade.packages.expandable_reorderable_list.expandable_reorderable_list_item_builder}
 /// Builder callback to build the item.
 /// {@endtemplate}
-typedef ExpandableReorderableListItemBuilder = Widget Function(BuildContext, Widget?, ExpandableReorderableListItemModel);
+typedef ExpandableReorderableListItemBuilder = Widget Function(
+    BuildContext, Widget?, ExpandableReorderableListItemModel);
 
 /// {@template novade.packages.expandable_reorderable_list.expandable_reorderable_list_item}
 /// Item of the [AnimatedReorderableListView].
 /// {@endtemplate}
-class ExpandableReorderableListItem<K extends Key> extends ExpandableReorderableListTreeItem<K> with EquatableMixin {
+class ExpandableReorderableListItem<K extends Key>
+    extends ExpandableReorderableListTreeItem<K> with EquatableMixin {
   ///  {@macro novade.packages.expandable_reorderable_list.expandable_reorderable_list_item}
   ExpandableReorderableListItem({
     required this.key,
     ExpandableReorderableListItemBuilder? builder,
     this.child,
     List<ExpandableReorderableListItem<K>>? children,
-  })  : assert(builder != null || child != null, 'child or builder must be specified'),
+  })  : assert(builder != null || child != null,
+            'child or builder must be specified'),
         builder = builder ?? _defaultBuilder,
         super(children: children);
 
@@ -152,13 +167,16 @@ class ExpandableReorderableListItem<K extends Key> extends ExpandableReorderable
   final ExpandableReorderableListItemBuilder builder;
 
   /// Builder that returns the [child] if as a non nullable [Widget].
-  static Widget _defaultBuilder(BuildContext context, Widget? child, ExpandableReorderableListItemModel model) => child!;
+  static Widget _defaultBuilder(BuildContext context, Widget? child,
+          ExpandableReorderableListItemModel model) =>
+      child!;
 }
 
 /// {@template novade.packages.expandable_reorderable_list.expandable_reorderable_list_root_item}
 /// The root item of the item tree.
 /// {@endtemplate}
-class ExpandableReorderableListRootItem<K extends Key> extends ExpandableReorderableListTreeItem<K> {
+class ExpandableReorderableListRootItem<K extends Key>
+    extends ExpandableReorderableListTreeItem<K> {
   /// {@macro novade.packages.expandable_reorderable_list.expandable_reorderable_list_root_item}
   ExpandableReorderableListRootItem({
     List<ExpandableReorderableListItem<K>>? children,
@@ -177,13 +195,18 @@ class ExpandableReorderableListRootItem<K extends Key> extends ExpandableReorder
   K get key => throw Exception('The root item does not have a key');
 
   /// The total number of visible items.
-  int visibleItemCount(ExpandableReorderableListItemModelController<K> modelsController) => __visibleItemCount(modelsController);
+  int visibleItemCount(
+          ExpandableReorderableListItemModelController<K> modelsController) =>
+      __visibleItemCount(modelsController);
 
   /// Get the item in the tree from its visible index.
   ExpandableReorderableListItem<K>? itemFromIndex({
     required int index,
     required ExpandableReorderableListItemModelController<K> modelsController,
   }) {
-    return _itemFromIndex(index: index, modelsController: modelsController, current: -1) as ExpandableReorderableListItem<K>?;
+    return _itemFromIndex(
+        index: index,
+        modelsController: modelsController,
+        current: -1) as ExpandableReorderableListItem<K>?;
   }
 }

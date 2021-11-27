@@ -4,7 +4,8 @@ import 'expandable_reorderable_list_item.dart';
 import 'expandable_reorderable_list_item_model.dart';
 
 /// Callback method with [OnReorderParam] as a parameter.
-typedef OnReorder<K extends Key> = void Function(OnReorderParam<K> onReorderParam);
+typedef OnReorder<K extends Key> = void Function(
+    OnReorderParam<K> onReorderParam);
 
 /// Mixin handling the reorder of the AnimatedReorderableListView.
 mixin OnReorderMixin<K extends Key> {
@@ -47,16 +48,26 @@ mixin OnReorderMixin<K extends Key> {
       newPreviousItemIndex--;
     }
 
-    final item = itemsTree.itemFromIndex(index: updatedOldIndex, modelsController: modelsController)!; // The moved item
-    ExpandableReorderableListItem<K>? newPreviousItem; // The item before the moved item after the drop
-    ExpandableReorderableListItem<K>? newNextItem; // The item after the moved item after the drop
+    final item = itemsTree.itemFromIndex(
+        index: updatedOldIndex,
+        modelsController: modelsController)!; // The moved item
+    ExpandableReorderableListItem<K>?
+        newPreviousItem; // The item before the moved item after the drop
+    ExpandableReorderableListItem<K>?
+        newNextItem; // The item after the moved item after the drop
 
-    final newNextItemIndex = newPreviousItemIndex + 1 == oldIndex ? newPreviousItemIndex + 2 : newPreviousItemIndex + 1;
-    if (!(newPreviousItemIndex < 0 || (newPreviousItemIndex == 0 && hasLeads))) {
-      newPreviousItem = itemsTree.itemFromIndex(index: newPreviousItemIndex, modelsController: modelsController);
+    final newNextItemIndex = newPreviousItemIndex + 1 == oldIndex
+        ? newPreviousItemIndex + 2
+        : newPreviousItemIndex + 1;
+    if (!(newPreviousItemIndex < 0 ||
+        (newPreviousItemIndex == 0 && hasLeads))) {
+      newPreviousItem = itemsTree.itemFromIndex(
+          index: newPreviousItemIndex, modelsController: modelsController);
     }
-    if (!(newNextItemIndex >= childrenNumber || (newNextItemIndex == childrenNumber && hasTails))) {
-      newNextItem = itemsTree.itemFromIndex(index: newNextItemIndex, modelsController: modelsController);
+    if (!(newNextItemIndex >= childrenNumber ||
+        (newNextItemIndex == childrenNumber && hasTails))) {
+      newNextItem = itemsTree.itemFromIndex(
+          index: newNextItemIndex, modelsController: modelsController);
     }
 
     return OnReorderParam<K>(

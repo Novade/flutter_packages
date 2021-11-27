@@ -7,7 +7,9 @@ extension VisibilityDetectorWidgetTester on WidgetTester {
   static const defaultDuration = Duration(milliseconds: 100);
 
   Duration get updateInterval =>
-      VisibilityDetectorController.instance.updateInterval == Duration.zero ? defaultDuration : VisibilityDetectorController.instance.updateInterval;
+      VisibilityDetectorController.instance.updateInterval == Duration.zero
+          ? defaultDuration
+          : VisibilityDetectorController.instance.updateInterval;
 
   /// Waits sufficiently long for the visibility callbacks to fire.
   Future<void> initWidgetTree({Duration duration = Duration.zero}) async {

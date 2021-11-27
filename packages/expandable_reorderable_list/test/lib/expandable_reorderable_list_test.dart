@@ -64,11 +64,15 @@ void main() {
 
       expect(
         find.byWidgetPredicate(
-          (widget) => widget is ReorderableListView && widget.header == null && widget.itemCount == 6,
+          (widget) =>
+              widget is ReorderableListView &&
+              widget.header == null &&
+              widget.itemCount == 6,
         ),
         findsOneWidget,
       );
-      await expectLater(find.byWidget(widget), matchesGoldenFile('golden/expandable_reorderable_list_view.png'));
+      await expectLater(find.byWidget(widget),
+          matchesGoldenFile('golden/expandable_reorderable_list_view.png'));
       await tester.clearWidgetTree();
     });
 
@@ -133,7 +137,8 @@ void main() {
       await tester.clearWidgetTree();
     });
 
-    testWidgets('It should display the least with a deeply nested tree', (tester) async {
+    testWidgets('It should display the least with a deeply nested tree',
+        (tester) async {
       tester.binding.window.physicalSizeTestValue = const Size(250, 500);
       tester.binding.window.devicePixelRatioTestValue = 1;
       final tree = const BuildTreeInput([
@@ -175,7 +180,10 @@ void main() {
       await tester.pumpWidget(widget);
       await tester.initWidgetTree();
 
-      await expectLater(find.byKey(const Key('home')), matchesGoldenFile('golden/expandable_reorderable_list_view.4_levels.png'));
+      await expectLater(
+          find.byKey(const Key('home')),
+          matchesGoldenFile(
+              'golden/expandable_reorderable_list_view.4_levels.png'));
       await tester.clearWidgetTree();
     });
   });
@@ -197,7 +205,8 @@ void main() {
           BuildTreeInput(),
         ]),
       ]).toTree();
-      final modelsController = ExpandableReorderableListItemModelController<Key>();
+      final modelsController =
+          ExpandableReorderableListItemModelController<Key>();
       final widget = MaterialApp(
         home: ExpandableReorderableList<Key>(
           modelsController: modelsController,

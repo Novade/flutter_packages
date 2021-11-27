@@ -16,7 +16,8 @@ class BuildTreeInput {
 }
 
 extension _BuildTreeInputListExtension on List<BuildTreeInput> {
-  List<ExpandableReorderableListItem<Key>> toItems([List<int> position = const []]) {
+  List<ExpandableReorderableListItem<Key>> toItems(
+      [List<int> position = const []]) {
     return asMap().entries.map((entry) {
       final currentPosition = [...position, entry.key];
       return ExpandableReorderableListItem<Key>(
@@ -56,7 +57,8 @@ class ItemWidget extends StatelessWidget {
   /// Set [margin] to `false` to not include the [Card] margin.
   static double heightFromLevel(int level, {bool margin = true}) {
     assert(level > 0);
-    return (kMinHeight + (kMinHeight * (pow(0.5, level - 1)))).toDouble() + (margin ? 2 * ItemWidget.margin : 0);
+    return (kMinHeight + (kMinHeight * (pow(0.5, level - 1)))).toDouble() +
+        (margin ? 2 * ItemWidget.margin : 0);
   }
 
   /// The [Card] margin.
