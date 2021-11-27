@@ -358,10 +358,12 @@ class _ExpandableReorderableListState<K extends Key>
       if (index == 0) return lead!;
       shiftedIndex--;
     }
-    if (shiftedIndex == itemCount - 1 && hasTails) return tail!;
+    if (index == itemCount - 1 && hasTails) return tail!;
 
     final item = _itemsTree.itemFromIndex(
-        index: shiftedIndex, modelsController: _modelsController)!;
+      index: shiftedIndex,
+      modelsController: _modelsController,
+    )!;
     final modelController = _modelsController.items[item.key]!..index = index;
     return VisibilityDetector(
       key: item.key,
