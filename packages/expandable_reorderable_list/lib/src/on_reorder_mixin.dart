@@ -24,7 +24,9 @@ mixin OnReorderMixin<K extends Key> {
   /// Whether there are tails in the list.
   bool get hasTails;
 
-  /// Number of children.
+  /// Number of children in the tree.
+  ///
+  /// This excludes the leads and tails.
   int get childrenNumber => itemsTree.itemCount;
 
   /// Returns [OnReorderParam] object for the callback function given as a
@@ -32,21 +34,17 @@ mixin OnReorderMixin<K extends Key> {
   OnReorderParam<K> onReorder(int oldIndex, int newIndex) {
     var updatedOldIndex = oldIndex; // Normalized old index
     var updatedNewIndex = newIndex; // Normalized new index
-    var newPreviousItemIndex = newIndex - 1; // index of the previous item
     if (hasLeads) {
       updatedOldIndex--;
       updatedNewIndex--;
-      newPreviousItemIndex--;
     }
     if (hasTails) {
-      if (newIndex > childrenNumber) {
+      if (newIndex > childrenNumber + 1) {
         updatedNewIndex--;
-        newPreviousItemIndex--;
       }
     }
-    if (newPreviousItemIndex == oldIndex) {
-      newPreviousItemIndex--;
-    }
+    // Index of the previous item
+    final newPreviousItemIndex = updatedNewIndex - 1;
 
     final item = itemsTree.itemFromIndex(
         index: updatedOldIndex,
@@ -56,11 +54,8 @@ mixin OnReorderMixin<K extends Key> {
     ExpandableReorderableListItem<K>?
         newNextItem; // The item after the moved item after the drop
 
-    final newNextItemIndex = newPreviousItemIndex + 1 == oldIndex
-        ? newPreviousItemIndex + 2
-        : newPreviousItemIndex + 1;
-    if (!(newPreviousItemIndex < 0 ||
-        (newPreviousItemIndex == 0 && hasLeads))) {
+    final newNextItemIndex = newPreviousItemIndex + 1;
+    if (!(newPreviousItemIndex < 0)) {
       newPreviousItem = itemsTree.itemFromIndex(
           index: newPreviousItemIndex, modelsController: modelsController);
     }

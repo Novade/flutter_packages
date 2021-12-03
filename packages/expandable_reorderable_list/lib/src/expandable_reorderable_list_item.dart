@@ -48,9 +48,10 @@ abstract class ExpandableReorderableListTreeItem<K extends Key>
   int __visibleItemCount(
       ExpandableReorderableListItemModelController<K> modelsController) {
     return children.fold<int>(
-        children.length,
-        (previousValue, child) =>
-            previousValue + child._visibleItemCount(modelsController));
+      children.length,
+      (previousValue, child) =>
+          previousValue + child._visibleItemCount(modelsController),
+    );
   }
 
   ExpandableReorderableListTreeItem<K>? _itemFromIndex({
@@ -66,9 +67,10 @@ abstract class ExpandableReorderableListTreeItem<K extends Key>
       final childItemCount = child._visibleItemCount(modelsController) + 1;
       if (_current + childItemCount > index)
         return child._itemFromIndex(
-            index: index,
-            modelsController: modelsController,
-            current: _current);
+          index: index,
+          modelsController: modelsController,
+          current: _current,
+        );
       _current += childItemCount;
     }
     return null;
