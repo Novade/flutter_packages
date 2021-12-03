@@ -41,8 +41,8 @@ class VisibilityController<K extends Key> extends ChangeNotifier {
 ///
 /// ---
 ///
-/// This example inspired by the one in the [ReorderableListView] documentation,
-/// creates a list using [ExpandableReorderableList]:
+/// This example, inspired by the [ReorderableListView] documentation, creates a
+/// list using [ExpandableReorderableList]:
 ///
 /// ```dart
 ///  final List<int> _items = List<int>.generate(50, (index) => index);
