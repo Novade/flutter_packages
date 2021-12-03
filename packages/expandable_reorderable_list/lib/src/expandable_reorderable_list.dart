@@ -35,6 +35,51 @@ class VisibilityController<K extends Key> extends ChangeNotifier {
 
 /// {@template novade.package.expandable_reorderable_list.expandable_reorderable_list}
 /// An expandable reorderable list.
+///
+/// If `onReorder` is specified, it builds a [ReorderableListView], if not, it
+/// builds a [ListView].
+///
+/// ---
+///
+/// This example inspired by the one in the [ReorderableListView] documentation,
+/// creates a list using [ExpandableReorderableList]:
+///
+/// ```dart
+///  final List<int> _items = List<int>.generate(50, (index) => index);
+///
+///  @override
+///  Widget build(BuildContext context) {
+///    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+///    final Color oddItemColor = colorScheme.primary.withOpacity(0.05);
+///    final Color evenItemColor = colorScheme.primary.withOpacity(0.15);
+///    return ExpandableReorderableList<ValueKey<int>>(
+///      onReorder: (onReorderParam) {
+///        setState(() {
+///          var newIndex = onReorderParam.newIndex;
+///          if (onReorderParam.oldIndex < onReorderParam.newIndex) {
+///            newIndex -= 1;
+///          }
+///          final int item = _items.removeAt(onReorderParam.oldIndex);
+///          _items.insert(newIndex, item);
+///        });
+///      },
+///      children: _items.map((int item) {
+///        return ExpandableReorderableListItem<ValueKey<int>>(
+///          key: ValueKey<int>(item),
+///          builder: (_, child, model) {
+///            return ReorderableDragStartListener(
+///              index: model.index!,
+///              child: ListTile(
+///                title: Text('Item $item'),
+///                tileColor: item.isOdd ? oddItemColor : evenItemColor,
+///              ),
+///            );
+///          },
+///        );
+///      }).toList(),
+///    );
+///  }
+/// ```
 /// {@endtemplate}
 class ExpandableReorderableList<K extends Key> extends StatefulWidget {
   /// {@macro novade.package.expandable_reorderable_list.expandable_reorderable_list}
@@ -59,9 +104,21 @@ class ExpandableReorderableList<K extends Key> extends StatefulWidget {
   /// Children of the [ExpandableReorderableList].
   final List<ExpandableReorderableListItem<K>> children;
 
-  /// A callback used by the list to report that a list item has been dragged to
-  /// a new location in the list and the application should update the order of
-  /// the items.
+  /// A callback used by the list to report that a list item has been dragged
+  /// and dropped to a new location in the list and the application should
+  /// update the order of the items.
+  ///
+  /// The dragged item is available as `onReorderParam.item`.
+  ///
+  /// The `from` and `to` are the indexes of the items are available with
+  /// `onReorderParam.oldIndex` and `onReorderParam.newIndex`.
+  ///
+  /// The "new" previous and next items (items before and after the drop
+  /// position) are available with `onReorderParam.newPreviousItem` and
+  /// `onReorderParam.newNextItem` (both nullable).
+  /// `onReorderParam.newPreviousItem` will be `null` if the item is dropped at
+  /// the beginning of the list while `onReorderParam.newNextItem` will be
+  /// `null` if the item is dropped at the end of the list.
   final OnReorder<K>? onReorder;
 
   /// Scroll Controller.

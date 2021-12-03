@@ -65,12 +65,13 @@ abstract class ExpandableReorderableListTreeItem<K extends Key>
     _current++;
     for (final child in children) {
       final childItemCount = child._visibleItemCount(modelsController) + 1;
-      if (_current + childItemCount > index)
+      if (_current + childItemCount > index) {
         return child._itemFromIndex(
           index: index,
           modelsController: modelsController,
           current: _current,
         );
+      }
       _current += childItemCount;
     }
     return null;

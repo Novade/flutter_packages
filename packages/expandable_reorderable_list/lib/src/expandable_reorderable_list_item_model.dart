@@ -11,6 +11,10 @@ typedef CollapseCallback = void Function({bool? isCollapsed});
 
 /// {@template novade.packages.expandable_reorderable_list.expandable_reorderable_list_item_model}
 /// Model of an [ExpandableReorderableListItem].
+///
+/// It contains
+/// - The index of the item in the list (not the tree).
+/// - Whether or not the item is collapsed.
 /// {@endtemplate}
 class ExpandableReorderableListItemModel extends ChangeNotifier {
   /// {@macro novade.packages.expandable_reorderable_list.expandable_reorderable_list_item_model}
