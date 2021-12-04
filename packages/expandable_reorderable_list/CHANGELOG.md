@@ -1,3 +1,7 @@
+## 0.0.3
+
+- Update the README to display gif examples.
+
 ## 0.0.2
 
 - Provide a better documentation.
