@@ -35,6 +35,51 @@ class VisibilityController<K extends Key> extends ChangeNotifier {
 
 /// {@template novade.package.expandable_reorderable_list.expandable_reorderable_list}
 /// An expandable reorderable list.
+///
+/// If `onReorder` is specified, it builds a [ReorderableListView], if not, it
+/// builds a [ListView].
+///
+/// ---
+///
+/// This example, inspired by the [ReorderableListView] documentation, creates a
+/// list using [ExpandableReorderableList]:
+///
+/// ```dart
+///  final List<int> _items = List<int>.generate(50, (index) => index);
+///
+///  @override
+///  Widget build(BuildContext context) {
+///    final colorScheme = Theme.of(context).colorScheme;
+///    final oddItemColor = colorScheme.primary.withOpacity(0.05);
+///    final evenItemColor = colorScheme.primary.withOpacity(0.15);
+///    return ExpandableReorderableList<ValueKey<int>>(
+///      onReorder: (onReorderParam) {
+///        setState(() {
+///          var newIndex = onReorderParam.newIndex;
+///          if (onReorderParam.oldIndex < onReorderParam.newIndex) {
+///            newIndex -= 1;
+///          }
+///          final int item = _items.removeAt(onReorderParam.oldIndex);
+///          _items.insert(newIndex, item);
+///        });
+///      },
+///      children: _items.map((int item) {
+///        return ExpandableReorderableListItem<ValueKey<int>>(
+///          key: ValueKey<int>(item),
+///          builder: (_, child, model) {
+///            return ReorderableDragStartListener(
+///              index: model.index!,
+///              child: ListTile(
+///                title: Text('Item $item'),
+///                tileColor: item.isOdd ? oddItemColor : evenItemColor,
+///              ),
+///            );
+///          },
+///        );
+///      }).toList(),
+///    );
+///  }
+/// ```
 /// {@endtemplate}
 class ExpandableReorderableList<K extends Key> extends StatefulWidget {
   /// {@macro novade.package.expandable_reorderable_list.expandable_reorderable_list}
@@ -59,9 +104,21 @@ class ExpandableReorderableList<K extends Key> extends StatefulWidget {
   /// Children of the [ExpandableReorderableList].
   final List<ExpandableReorderableListItem<K>> children;
 
-  /// A callback used by the list to report that a list item has been dragged to
-  /// a new location in the list and the application should update the order of
-  /// the items.
+  /// A callback used by the list to report that a list item has been dragged
+  /// and dropped to a new location in the list and the application should
+  /// update the order of the items.
+  ///
+  /// The dragged item is available as `onReorderParam.item`.
+  ///
+  /// The `from` and `to` are the indexes of the items are available with
+  /// `onReorderParam.oldIndex` and `onReorderParam.newIndex`.
+  ///
+  /// The "new" previous and next items (items before and after the drop
+  /// position) are available with `onReorderParam.newPreviousItem` and
+  /// `onReorderParam.newNextItem` (both nullable).
+  /// `onReorderParam.newPreviousItem` will be `null` if the item is dropped at
+  /// the beginning of the list while `onReorderParam.newNextItem` will be
+  /// `null` if the item is dropped at the end of the list.
   final OnReorder<K>? onReorder;
 
   /// Scroll Controller.
@@ -74,10 +131,13 @@ class ExpandableReorderableList<K extends Key> extends StatefulWidget {
   final ExpandableReorderableListItemModelController<K>? modelsController;
 
   @override
-  _ExpandableReorderableListState<K> createState() => _ExpandableReorderableListState<K>();
+  _ExpandableReorderableListState<K> createState() =>
+      _ExpandableReorderableListState<K>();
 }
 
-class _ExpandableReorderableListState<K extends Key> extends State<ExpandableReorderableList<K>> with TickerProviderStateMixin, OnReorderMixin<K> {
+class _ExpandableReorderableListState<K extends Key>
+    extends State<ExpandableReorderableList<K>>
+    with TickerProviderStateMixin, OnReorderMixin<K> {
   /// The items tree.
   late ExpandableReorderableListRootItem<K> _itemsTree;
   @override
@@ -97,7 +157,8 @@ class _ExpandableReorderableListState<K extends Key> extends State<ExpandableReo
   /// Item models of all the children (from all levels).
   late ExpandableReorderableListItemModelController<K> _modelsController;
   @override
-  ExpandableReorderableListItemModelController<K> get modelsController => _modelsController;
+  ExpandableReorderableListItemModelController<K> get modelsController =>
+      _modelsController;
 
   /// Key of the item to expand after the build is complete. If `null`, no item
   /// will be expanded.
@@ -121,10 +182,12 @@ class _ExpandableReorderableListState<K extends Key> extends State<ExpandableReo
   ///
   /// {@macro novade.packages.expandable_reorderable_list.collapse_callback}
   Future<void> collapseItemCallback(K key, {bool? isCollapsed}) async {
-    final _isCollapsed = isCollapsed ?? !_modelsController.items[key]!.isCollapsed;
+    final _isCollapsed =
+        isCollapsed ?? !_modelsController.items[key]!.isCollapsed;
     final item = itemsMap[key]!;
     if (_isCollapsed && !_modelsController.items[key]!.isCollapsed) {
-      final futures = item.children.map(hideItem).fold<List<Future<void>>>(<Future<void>>[], (value, element) => [...value, ...element]);
+      final futures = item.children.map(hideItem).fold<List<Future<void>>>(
+          <Future<void>>[], (value, element) => [...value, ...element]);
       await Future.wait(futures);
 
       // We should set `isCollapsed` of the model after the animation.
@@ -168,10 +231,13 @@ class _ExpandableReorderableListState<K extends Key> extends State<ExpandableReo
 
     // If an item is not collapsed, we need to hide its children too.
     if (!_modelsController.items[item.key]!.isCollapsed) {
-      futures.addAll(item.children.map(hideItem).fold<List<Future<void>>>(<Future<void>>[], (value, element) => [...value, ...element]));
+      futures.addAll(item.children.map(hideItem).fold<List<Future<void>>>(
+          <Future<void>>[], (value, element) => [...value, ...element]));
     }
     final ticker = animationControllers[item.key]!.reverse(); // Hide
-    futures.add(ticker.orCancel.then(_thunk, onError: _thunk)); // Await for the ticker to complete even if it is cancelled.
+    futures.add(ticker.orCancel.then(_thunk,
+        onError:
+            _thunk)); // Await for the ticker to complete even if it is cancelled.
     return futures;
   }
 
@@ -179,12 +245,15 @@ class _ExpandableReorderableListState<K extends Key> extends State<ExpandableReo
   List<Future<void>> showItem(ExpandableReorderableListItem<K> item) {
     final ticker = animationControllers[item.key]!.forward(); // Show
     final futures = <Future<void>>[
-      ticker.orCancel.then(_thunk, onError: _thunk), // Await for the ticker to complete even if it is cancelled.
+      ticker.orCancel.then(_thunk,
+          onError:
+              _thunk), // Await for the ticker to complete even if it is cancelled.
     ];
 
     // If an item is not collapsed, we need to show its children too.
     if (!_modelsController.items[item.key]!.isCollapsed) {
-      futures.addAll(item.children.map(showItem).fold<List<Future<void>>>(<Future<void>>[], (value, element) => [...value, ...element]));
+      futures.addAll(item.children.map(showItem).fold<List<Future<void>>>(
+          <Future<void>>[], (value, element) => [...value, ...element]));
     }
     return futures;
   }
@@ -238,13 +307,16 @@ class _ExpandableReorderableListState<K extends Key> extends State<ExpandableReo
 
     // Visibility for scrolling
     if (!(widget.visibilityController?.items.containsKey(item.key) ?? false)) {
-      widget.visibilityController?.setVisibility(VisibilityInfo(key: item.key), notify: false);
+      widget.visibilityController
+          ?.setVisibility(VisibilityInfo(key: item.key), notify: false);
     }
 
     // Item model
     if (!_modelsController.items.containsKey(item.key)) {
       final itemModel = ExpandableReorderableListItemModel(
-        collapseCallback: ({isCollapsed}) => collapseItemCallback(item.key, isCollapsed: isCollapsed), // Give the collapse/expand function to the child
+        collapseCallback: ({isCollapsed}) => collapseItemCallback(item.key,
+            isCollapsed:
+                isCollapsed), // Give the collapse/expand function to the child
       );
       _modelsController.items[item.key] = itemModel;
     }
@@ -317,7 +389,8 @@ class _ExpandableReorderableListState<K extends Key> extends State<ExpandableReo
   @override
   void initState() {
     super.initState();
-    _modelsController = widget.modelsController ?? ExpandableReorderableListItemModelController<K>();
+    _modelsController = widget.modelsController ??
+        ExpandableReorderableListItemModelController<K>();
     initItems();
   }
 
@@ -342,9 +415,12 @@ class _ExpandableReorderableListState<K extends Key> extends State<ExpandableReo
       if (index == 0) return lead!;
       shiftedIndex--;
     }
-    if (shiftedIndex == itemCount - 1 && hasTails) return tail!;
+    if (index == itemCount - 1 && hasTails) return tail!;
 
-    final item = _itemsTree.itemFromIndex(index: shiftedIndex, modelsController: _modelsController)!;
+    final item = _itemsTree.itemFromIndex(
+      index: shiftedIndex,
+      modelsController: _modelsController,
+    )!;
     final modelController = _modelsController.items[item.key]!..index = index;
     return VisibilityDetector(
       key: item.key,
