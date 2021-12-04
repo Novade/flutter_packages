@@ -10,7 +10,7 @@ that allows you to:
 Checkout [our example](https://github.com/Novade/flutter_packages/tree/master/packages/expandable_reorderable_list/example):
 
 
-![](https://github.com/Novade/flutter_packages/tree/master/packages/expandable_reorderable_list/resources/expandable_reorderable_list.example.gif)
+![](https://github.com/Novade/flutter_packages/blob/master/packages/expandable_reorderable_list/resources/expandable_reorderable_list.example.gif)
 
 
 ## Example
@@ -64,7 +64,7 @@ class _MyListState extends State<HomeTest> {
 }
 ```
 
-![](https://github.com/Novade/flutter_packages/tree/master/packages/expandable_reorderable_list/resources/expandable_reorderable_list.small_example.gif)
+![](https://github.com/Novade/flutter_packages/blob/master/packages/expandable_reorderable_list/resources/expandable_reorderable_list.small_example.gif)
 
 
 
