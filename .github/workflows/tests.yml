@@ -1,0 +1,46 @@
+name: Tests
+on: [pull_request]
+jobs:
+  packages:
+    runs-on: ubuntu-latest
+    # Lists the modified packages in the PR.
+    outputs:
+      package: ${{ steps.changes.outputs.packages }}
+    steps:
+      # Make sure we have some code to diff.
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # To retrieve the full git history.
+      - name: Get changed files
+        id: changes
+        # Set outputs using the command.
+        run: |
+          packages=$((
+            echo '{ "package" : ['
+            git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep ^packages | cut -d/ -f 1-2| uniq | sed 's/^\(.*\)$/\\"\1\\",/' | xargs | sed 's/,$//g'
+            echo ']}'
+          ) | jq -c .)
+          echo "::set-output name=packages::$packages"
+      - name: echo modified packages
+        run: |
+          echo ${{ steps.changes.outputs.packages }}
+  test:
+    runs-on: macos-latest
+    name: Dart linter and tests
+    needs: packages
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.packages.outputs.package) }}
+    defaults:
+      run:
+        working-directory: ./${{ matrix.package }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v1
+      - run: flutter pub get
+      - name: Analyze dart code
+        uses: ValentinVignal/action-dart-analyze@v0.12
+      - name: Run tests
+        run: flutter test
