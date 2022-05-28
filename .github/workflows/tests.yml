@@ -1,3 +1,6 @@
+# Those are publisher names.
+# cSpell:ignore Vignal subosito
+
 name: Tests
 on: [pull_request]
 jobs:
@@ -15,6 +18,7 @@ jobs:
       - name: Get changed files
         id: changes
         # Set outputs using the command.
+        # cSpell:ignore ACMRT
         run: |
           packages=$((
             echo '{ "package" : ['
@@ -44,3 +48,18 @@ jobs:
         uses: ValentinVignal/action-dart-analyze@v0.12
       - name: Run tests
         run: flutter test
+  spelling:
+    # Verifies there is no spelling errors in the code.
+    runs-on: ubuntu-latest
+    name: Check code spelling
+    needs: packages
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.packages.outputs.package) }}
+    defaults:
+      run:
+        working-directory: ./${{ matrix.package }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check spelling
+        uses: streetsidesoftware/cspell-action@v1
