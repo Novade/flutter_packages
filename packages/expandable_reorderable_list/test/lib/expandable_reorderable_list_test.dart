@@ -5,8 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../utils/utils.dart';
 
-// Bad spelling hibjkl
-
 void main() {
   group('Display:', () {
     testWidgets('It should display a reorderable list', (tester) async {
