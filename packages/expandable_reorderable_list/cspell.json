@@ -1,0 +1,14 @@
+{
+  "ignorePaths": [
+    "cspell.json",
+    "pubspec.yaml",
+    ".vscode/extensions.json" // It only contains extension ids.
+  ],
+  "words": [
+    "endtemplate",
+    "microtask",
+    "Novade",
+    "reorderable",
+    "vsync"
+  ]
+}
