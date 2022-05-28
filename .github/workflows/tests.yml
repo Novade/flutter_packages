@@ -63,3 +63,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check spelling
         uses: streetsidesoftware/cspell-action@v1
+        with:
+          root: ./${{ matrix.package }}
