@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'expandable_reorderable_list_item.dart';
@@ -441,7 +442,7 @@ class _ExpandableReorderableListState<K extends Key>
     // Build the items before giving it to the list
     buildItems(context);
     if (itemToShow != null) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
         showItem(itemsMap[itemToShow]!);
         itemToShow = null;
       });
