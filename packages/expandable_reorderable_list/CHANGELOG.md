@@ -1,3 +1,7 @@
+## Unpublished
+
+- BREAKING: Replaces `SchedulerBinding.instance!` with `SchedulerBinding.instance`.
+
 ## 0.0.3
 
 - Update the README to display gif examples.

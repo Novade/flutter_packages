@@ -1,5 +1,5 @@
 import 'package:example/lead_or_tail.dart';
-import 'package:example/nester_item.dart';
+import 'package:example/nested_item.dart';
 import 'package:expandable_reorderable_list/expandable_reorderable_list.dart';
 import 'package:flutter/material.dart';
 
