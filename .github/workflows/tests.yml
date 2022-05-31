@@ -1,5 +1,5 @@
 # Those are publisher names.
-# cSpell:ignore Vignal subosito
+# cSpell:ignore Vignal subosito codecov
 
 name: Tests
 on: [pull_request]
