@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/Novade/flutter_packages/branch/master/graph/badge.svg?token=XMAPU6XT2I)](https://codecov.io/gh/Novade/flutter_packages)
+
 ## Expandable Reorderable List
 
 A wrapper around

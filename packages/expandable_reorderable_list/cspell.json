@@ -2,9 +2,11 @@
   "ignorePaths": [
     "cspell.json",
     "pubspec.yaml",
-    ".vscode/extensions.json" // It only contains extension ids.
+    ".vscode/extensions.json", // It only contains extension ids.
+    ".gitignore"
   ],
   "words": [
+    "codecov",
     "endtemplate",
     "microtask",
     "Novade",
