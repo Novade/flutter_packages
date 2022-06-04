@@ -58,10 +58,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.packages.outputs.package) }}
-    defaults:
-      run:
-        working-directory: ${{ matrix.package }}
     steps:
       - uses: actions/checkout@v3
       - name: Check spelling
         uses: streetsidesoftware/cspell-action@v2
+        with:
+          root: ${{ matrix.package }}
