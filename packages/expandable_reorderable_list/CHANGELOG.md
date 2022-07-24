@@ -1,4 +1,4 @@
-## Unpublished
+## 1.0.0
 
 - BREAKING: Replaces `SchedulerBinding.instance!` with `SchedulerBinding.instance`.
 

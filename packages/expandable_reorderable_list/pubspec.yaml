@@ -3,7 +3,7 @@ description: A wrapper around ReorderableListView that allows you to expand and 
 repository: https://github.com/Novade/flutter_packages/tree/master/packages/expandable_reorderable_list
 issue_tracker: https://github.com/Novade/flutter_packages/issues
 
-version: 0.0.3
+version: 1.0.0
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -13,7 +13,7 @@ dependencies:
   equatable: ^2.0.3
   flutter:
     sdk: flutter
-  visibility_detector: ^0.2.2
+  visibility_detector: ^0.3.3
 
 dev_dependencies:
   flutter_test:
