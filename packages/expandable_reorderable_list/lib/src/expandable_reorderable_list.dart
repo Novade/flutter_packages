@@ -92,6 +92,7 @@ class ExpandableReorderableList<K extends Key> extends StatefulWidget {
     this.scrollController,
     this.visibilityController,
     this.modelsController,
+    this.scrollDirection = Axis.vertical,
     Key? key,
   })  : children = children ?? <ExpandableReorderableListItem<K>>[],
         super(key: key);
@@ -130,6 +131,9 @@ class ExpandableReorderableList<K extends Key> extends StatefulWidget {
 
   /// The model controller.
   final ExpandableReorderableListItemModelController<K>? modelsController;
+
+  /// {@macro flutter.widgets.scroll_view.scrollDirection}
+  final Axis scrollDirection;
 
   @override
   _ExpandableReorderableListState<K> createState() =>
@@ -376,6 +380,7 @@ class _ExpandableReorderableListState<K extends Key>
       lead = _ExpandableReorderableListLeadTail(
         key: const ObjectKey(_LeadTail.lead),
         children: widget.leads,
+        axis: widget.scrollDirection,
       );
     }
     tail = null;
@@ -383,6 +388,7 @@ class _ExpandableReorderableListState<K extends Key>
       tail = _ExpandableReorderableListLeadTail(
         key: const ObjectKey(_LeadTail.tail),
         children: widget.tails,
+        axis: widget.scrollDirection,
       );
     }
   }
@@ -433,6 +439,7 @@ class _ExpandableReorderableListState<K extends Key>
       child: SizeTransition(
         sizeFactor: scaleAnimations[item.key]!,
         child: item.builder(context, item.child, modelController),
+        axis: widget.scrollDirection,
       ),
     );
   }
@@ -456,11 +463,13 @@ class _ExpandableReorderableListState<K extends Key>
             },
             scrollController: widget.scrollController,
             buildDefaultDragHandles: false,
+            scrollDirection: widget.scrollDirection,
           )
         : ListView.builder(
             itemCount: itemCount,
             itemBuilder: itemBuilder,
             controller: widget.scrollController,
+            scrollDirection: widget.scrollDirection,
           );
   }
 }
@@ -471,15 +480,25 @@ class _ExpandableReorderableListLeadTail extends StatelessWidget {
   const _ExpandableReorderableListLeadTail({
     required Key key,
     this.children = const <Widget>[],
+    required this.axis,
   }) : super(key: key);
 
   /// The children.
   final List<Widget> children;
 
+  /// The axis the leads or tails should be laid out.
+  final Axis axis;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: children,
-    );
+    if (axis == Axis.vertical) {
+      return Column(
+        children: children,
+      );
+    } else {
+      return Row(
+        children: children,
+      );
+    }
   }
 }
