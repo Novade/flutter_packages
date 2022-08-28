@@ -76,6 +76,81 @@ void main() {
       await tester.clearWidgetTree();
     });
 
+    testWidgets(
+      'It should display a reorderable list scrollable in the horizontal direction',
+      (tester) async {
+        final widget = ExpandableReorderableList(
+          scrollDirection: Axis.horizontal,
+          children: [
+            ExpandableReorderableListItem(
+              child: Container(
+                color: Colors.red,
+                width: 50,
+              ),
+              key: const Key('red'),
+              children: [
+                ExpandableReorderableListItem(
+                  child: Container(
+                    color: Colors.pink,
+                    width: 50,
+                  ),
+                  key: const Key('pink'),
+                ),
+                ExpandableReorderableListItem(
+                  child: Container(
+                    color: Colors.purple,
+                    width: 50,
+                  ),
+                  key: const Key('purple'),
+                ),
+              ],
+            ),
+            ExpandableReorderableListItem(
+              child: Container(
+                color: Colors.orange,
+                width: 50,
+              ),
+              key: const Key('orange'),
+              children: [
+                ExpandableReorderableListItem(
+                  child: Container(
+                    color: Colors.yellow,
+                    width: 50,
+                  ),
+                  key: const Key('yellow'),
+                ),
+              ],
+            ),
+            ExpandableReorderableListItem(
+              child: Container(
+                color: Colors.green,
+                width: 50,
+              ),
+              key: const Key('green'),
+            ),
+          ],
+          onReorder: (_) {},
+        );
+        await tester.initWidgetTree();
+        await tester.pumpWidget(MaterialApp(home: widget));
+
+        expect(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is ReorderableListView &&
+                widget.header == null &&
+                widget.itemCount == 6,
+          ),
+          findsOneWidget,
+        );
+        await expectLater(
+            find.byWidget(widget),
+            matchesGoldenFile(
+                'golden/expandable_reorderable_list_view.horizontal.png'));
+        await tester.clearWidgetTree();
+      },
+    );
+
     testWidgets('It should display a list view when disabled', (tester) async {
       final widget = MaterialApp(
         home: ExpandableReorderableList(

@@ -1,17 +1,21 @@
+## 1.1.0
+
+- Adds `scrollDirection` parameter.
+
 ## 1.0.0
 
 - BREAKING: Replaces `SchedulerBinding.instance!` with `SchedulerBinding.instance`.
 
 ## 0.0.3
 
-- Update the README to display gif examples.
+- Updates the README to display gif examples.
 
 ## 0.0.2
 
-- Provide a better documentation.
+- Provides a better documentation.
 - README.
-- Add an example.
+- Adds an example.
 
 ## 0.0.1
 
-- Initial  release.
+- Initial release.
