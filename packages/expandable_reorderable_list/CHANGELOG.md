@@ -1,3 +1,5 @@
+## NEXT
+
 ## 1.1.0
 
 - Adds `scrollDirection` parameter.
