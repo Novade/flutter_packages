@@ -1,5 +1,7 @@
 ## NEXT
 
+- Upgrade version for `visibility_detector`.
+
 ## 1.1.0
 
 - Adds `scrollDirection` parameter.
