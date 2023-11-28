@@ -1,4 +1,4 @@
-## NEXT
+## 1.2.0
 
 - Upgrade version for `visibility_detector`.
 
