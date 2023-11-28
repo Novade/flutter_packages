@@ -3,10 +3,10 @@ description: A wrapper around ReorderableListView that allows you to expand and 
 repository: https://github.com/Novade/flutter_packages/tree/master/packages/expandable_reorderable_list
 issue_tracker: https://github.com/Novade/flutter_packages/issues
 
-version: 1.1.0
+version: 1.2.0
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.12.0 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
