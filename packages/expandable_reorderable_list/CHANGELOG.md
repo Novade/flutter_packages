@@ -1,3 +1,7 @@
+## 2.0.0
+
+- Removes `visibility_detector`. If you want to use it, you can wrap your items with VisibilityDetector in the builder function.
+
 ## 1.2.0
 
 - Upgrade version for `visibility_detector`.
