@@ -59,7 +59,6 @@ void main() {
         ],
         onReorder: (_) {},
       );
-      await tester.initWidgetTree();
       await tester.pumpWidget(MaterialApp(home: widget));
 
       expect(
@@ -73,7 +72,6 @@ void main() {
       );
       await expectLater(find.byWidget(widget),
           matchesGoldenFile('golden/expandable_reorderable_list_view.png'));
-      await tester.clearWidgetTree();
     });
 
     testWidgets(
@@ -131,7 +129,6 @@ void main() {
           ],
           onReorder: (_) {},
         );
-        await tester.initWidgetTree();
         await tester.pumpWidget(MaterialApp(home: widget));
 
         expect(
@@ -147,7 +144,6 @@ void main() {
             find.byWidget(widget),
             matchesGoldenFile(
                 'golden/expandable_reorderable_list_view.horizontal.png'));
-        await tester.clearWidgetTree();
       },
     );
 
@@ -205,11 +201,9 @@ void main() {
         ),
       );
       await tester.pumpWidget(widget);
-      await tester.initWidgetTree();
 
       expect(find.byType(ListView), findsOneWidget);
       expect(find.byType(ReorderableListView), findsNothing);
-      await tester.clearWidgetTree();
     });
 
     testWidgets('It should display the least with a deeply nested tree',
@@ -253,13 +247,11 @@ void main() {
         ),
       );
       await tester.pumpWidget(widget);
-      await tester.initWidgetTree();
 
       await expectLater(
           find.byKey(const Key('home')),
           matchesGoldenFile(
               'golden/expandable_reorderable_list_view.4_levels.png'));
-      await tester.clearWidgetTree();
     });
   });
 
@@ -290,7 +282,6 @@ void main() {
       );
 
       await tester.pumpWidget(widget);
-      await tester.initWidgetTree();
 
       // All the items should be visible
       expectItems(
@@ -393,8 +384,6 @@ void main() {
         ['0', '0.0', '0.0.0', '0.0.1', '0.1', '1', '1.0', '1.0.0', '1.1'],
         findsOneWidget,
       );
-
-      await tester.clearWidgetTree();
     });
   });
 
@@ -420,7 +409,6 @@ void main() {
       );
 
       await tester.pumpWidget(widget);
-      await tester.initWidgetTree();
 
       tester.expectOrdered(['0', '0.0', '0.1', '1', '1.0', '1.1']);
 
@@ -507,8 +495,6 @@ void main() {
       expect(onReorderCalls.last.newPreviousItem!.key, const Key('1'));
 
       onReorderCalls.clear();
-
-      await tester.clearWidgetTree();
     });
   });
 }
