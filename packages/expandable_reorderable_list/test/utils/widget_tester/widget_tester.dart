@@ -2,8 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../common_finders.dart';
 
-export 'visibility_detector.dart';
-
 /// Helper extension on [WidgetTester].
 extension ItemWidgetTester on WidgetTester {
   /// Expect the given [items] to be in order.

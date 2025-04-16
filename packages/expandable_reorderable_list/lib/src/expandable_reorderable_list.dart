@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 import 'expandable_reorderable_list_item.dart';
 import 'expandable_reorderable_list_item_model.dart';
@@ -13,25 +12,6 @@ enum _LeadTail {
 
   /// Tail. It is the last item of the list.
   tail,
-}
-
-/// Visibility controller of the [ExpandableReorderableList].
-class VisibilityController<K extends Key> extends ChangeNotifier {
-  final _items = <K, VisibilityInfo>{};
-
-  /// The items with their visibility.
-  Map<K, VisibilityInfo> get items => _items;
-
-  /// Set the visibility of one widget.
-  void setVisibility(
-    VisibilityInfo visibilityInfo, {
-    bool notify = true,
-  }) {
-    _items[visibilityInfo.key as K] = visibilityInfo;
-    if (notify) {
-      Future.microtask(notifyListeners);
-    }
-  }
 }
 
 /// {@template novade.package.expandable_reorderable_list.expandable_reorderable_list}
@@ -90,7 +70,6 @@ class ExpandableReorderableList<K extends Key> extends StatefulWidget {
     List<ExpandableReorderableListItem<K>>? children,
     this.onReorder,
     this.scrollController,
-    this.visibilityController,
     this.modelsController,
     this.scrollDirection = Axis.vertical,
     Key? key,
@@ -125,9 +104,6 @@ class ExpandableReorderableList<K extends Key> extends StatefulWidget {
 
   /// Scroll Controller.
   final ScrollController? scrollController;
-
-  /// The visibility controller.
-  final VisibilityController<K>? visibilityController;
 
   /// The model controller.
   final ExpandableReorderableListItemModelController<K>? modelsController;
@@ -274,7 +250,6 @@ class _ExpandableReorderableListState<K extends Key>
         item: child,
       );
     }
-    clearVisibilityController();
     clearItemModels();
   }
 
@@ -310,12 +285,6 @@ class _ExpandableReorderableListState<K extends Key>
       curve: Curves.fastOutSlowIn,
     );
 
-    // Visibility for scrolling
-    if (!(widget.visibilityController?.items.containsKey(item.key) ?? false)) {
-      widget.visibilityController
-          ?.setVisibility(VisibilityInfo(key: item.key), notify: false);
-    }
-
     // Item model
     if (!_modelsController.items.containsKey(item.key)) {
       final itemModel = ExpandableReorderableListItemModel(
@@ -346,15 +315,6 @@ class _ExpandableReorderableListState<K extends Key>
       }
     });
     keysToRemove.forEach(map.remove);
-  }
-
-  /// Clear the orphan keys of the [VisibilityController].
-  ///
-  /// It can happen when some widgets are removed.
-  void clearVisibilityController() {
-    if (widget.visibilityController != null) {
-      clearMap(widget.visibilityController!.items);
-    }
   }
 
   /// Clear keys of `itemModelMap`.
@@ -429,18 +389,11 @@ class _ExpandableReorderableListState<K extends Key>
       modelsController: _modelsController,
     )!;
     final modelController = _modelsController.items[item.key]!..index = index;
-    return VisibilityDetector(
+    return SizeTransition(
       key: item.key,
-      onVisibilityChanged: (visibilityInfo) {
-        if (mounted) {
-          widget.visibilityController?.setVisibility(visibilityInfo);
-        }
-      },
-      child: SizeTransition(
-        sizeFactor: scaleAnimations[item.key]!,
-        child: item.builder(context, item.child, modelController),
-        axis: widget.scrollDirection,
-      ),
+      sizeFactor: scaleAnimations[item.key]!,
+      child: item.builder(context, item.child, modelController),
+      axis: widget.scrollDirection,
     );
   }
 
